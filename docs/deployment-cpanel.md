@@ -52,9 +52,11 @@ Set these repository secrets in GitHub before enabling deployment:
 - `CPANEL_FTP_PORT`
 - `CPANEL_REMOTE_DIR`
 
-Recommended `CPANEL_REMOTE_DIR` example:
+Recommended `CPANEL_REMOTE_DIR` depends on the FTP account root:
 
-- `/public_html/ops/`
+- If your FTP user points directly to the subdomain document root, use:
+  - `/`
+- If your FTP user has access to the parent account root, use the full document-root path.
 
 ## Deployment Flow
 
@@ -72,4 +74,4 @@ Recommended `CPANEL_REMOTE_DIR` example:
 - Secrets are compiled into the app at build time, so use the correct production values in GitHub.
 - Do not upload the source repo directly to cPanel.
 - For Teams packaging later, use `https://ops.panafricanedu.com` as the app/tab URL.
-
+- If the site shows `404 Not Found` after a successful deploy, the most common cause is `CPANEL_REMOTE_DIR` pointing to the wrong folder. For a dedicated FTP user scoped to `ops.panafricanedu.com/`, set `CPANEL_REMOTE_DIR` to `/`.
