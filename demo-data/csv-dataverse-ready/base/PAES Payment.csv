@@ -1,0 +1,5 @@
+"Payment Reference","Payment ID","Payment Type","Revenue Stream","Amount","Payment Date","Payment Status","Notes"
+"PAY-DEP-001","PAY-001","Invoice","Deployment","80000","2026-05-16","Paid","First deployment invoice received."
+"PAY-LRN-001","PAY-002","Collection","Learning","12000","2026-05-25","Paid","Course fee settlement."
+"PAY-EVT-001","PAY-003","Collection","Event","1200","2026-06-28","Paid","Certification clinic attendance fee."
+"PAY-CER-001","PAY-004","Invoice","Certification","35000","2026-07-02","Pending","Certification billing raised."

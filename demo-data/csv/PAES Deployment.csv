@@ -1,0 +1,4 @@
+"Deployment Name","Deployment ID","Linked Demand","Linked Supply","Linked Readiness","Partner","Region","Deployment Date","Deployment Status","Number Deployed","Placement Revenue","Notes"
+"Deployment - Digital Sales Wave 1","DEP-001","Regional Digital Sales Cohort","Digital Sales Cohort A","Readiness - Digital Sales Cohort A","Nile Bridge Solutions","Addis Ababa","2026-05-12","Active","24","190000","First deployment wave activated."
+"Deployment - Annotation Team Launch","DEP-002","Junior Data Annotation Team","Annotation Team East","Readiness - Annotation Team East","Future Pathways Academy","Nairobi","2026-05-27","Planned","18","128000","Go-live planned for end of month."
+"Deployment - Support Pilot","DEP-003","Customer Support Readiness Pipeline","Support Cohort Gulf 1","Readiness - Support Cohort Gulf 1","Gulf Horizon Talent","Dubai","2026-06-06","Planned","10","90000","Pilot deployment pending final QA."
