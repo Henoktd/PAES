@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   BookOpen,
   Briefcase,
@@ -9,7 +9,9 @@ import {
   Building2,
   Users,
   Wallet,
+  X,
 } from "lucide-react";
+import { useEffect } from "react";
 import { env } from "../../config/env";
 import { useAccessControl } from "../../features/admin/AccessControlContext";
 import { moduleRoutes } from "../../features/modules/moduleRegistry";
@@ -26,11 +28,30 @@ const icons = {
   calendar: CalendarRange,
 };
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const { visibleModuleKeys } = useAccessControl();
+  const location = useLocation();
+
+  useEffect(() => {
+    onClose?.();
+  }, [location.pathname, onClose]);
 
   return (
-    <aside className="sidebar">
+    <>
+      <div
+        className={`sidebar-backdrop${isOpen ? " sidebar-backdrop--visible" : ""}`}
+        onClick={onClose}
+        aria-hidden={!isOpen}
+      />
+      <aside className={`sidebar${isOpen ? " sidebar--open" : ""}`}>
+        <button type="button" className="sidebar__close" onClick={onClose} aria-label="Close navigation">
+          <X size={18} />
+        </button>
       <div className="sidebar__brand">
         <div className="sidebar__logo sidebar__logo--image">
           <img src="/brand/paes-logo-vertical.png" alt="PAES logo" />
@@ -68,6 +89,7 @@ export function Sidebar() {
       <div className="sidebar__footer">
         <p>Built for operational visibility, partner coordination, and management reporting.</p>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }

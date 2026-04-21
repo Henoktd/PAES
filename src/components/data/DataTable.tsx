@@ -45,7 +45,7 @@ export function DataTable<TRecord extends BaseRecord>({
               {moduleConfig.columns.map((column) => {
                 const value = row[column.key];
                 return (
-                  <td key={String(column.key)}>
+                  <td key={String(column.key)} data-label={column.label}>
                     {column.key === "status" ? (
                       <StatusBadge status={String(value)} />
                     ) : (
@@ -54,7 +54,7 @@ export function DataTable<TRecord extends BaseRecord>({
                   </td>
                 );
               })}
-              <td>
+              <td data-label="Actions">
                 <div className="table-actions">
                   <Link to={`/${moduleConfig.path}/${row.id}`}>View</Link>
                   {canCreateEdit(moduleConfig.key) ? (
