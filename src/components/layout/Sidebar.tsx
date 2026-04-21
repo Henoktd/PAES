@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import {
-  ShieldCheck,
   BookOpen,
   Briefcase,
   CalendarRange,
@@ -28,7 +27,7 @@ const icons = {
 };
 
 export function Sidebar() {
-  const { visibleModuleKeys, canManageAccess } = useAccessControl();
+  const { visibleModuleKeys } = useAccessControl();
 
   return (
     <aside className="sidebar">
@@ -38,7 +37,7 @@ export function Sidebar() {
         </div>
         <div>
           <strong>{env.appName}</strong>
-          <p>Pan Africa Education & Skills operations platform</p>
+          <p>Pan Africa Education & Skills management platform</p>
         </div>
       </div>
 
@@ -64,12 +63,6 @@ export function Sidebar() {
           );
           })}
 
-        {canManageAccess ? (
-          <NavLink to="/admin" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-            <ShieldCheck size={18} />
-            <span>Admin</span>
-          </NavLink>
-        ) : null}
       </nav>
 
       <div className="sidebar__footer">

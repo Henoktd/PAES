@@ -3,7 +3,6 @@ import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { useNavigate } from "react-router-dom";
 import { loginRequest } from "../../config/msal";
 import { Button } from "../../components/ui/Button";
-import { env } from "../../config/env";
 
 export function LoginPage() {
   const isAuthenticated = useIsAuthenticated();
@@ -18,17 +17,26 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
-      <section className="login-card">
-        <span className="eyebrow">PAES Reporting</span>
-        <div className="login-card__brand">
+      <section className="login-simple">
+        <div className="login-simple__logo">
           <img src="/brand/paes-logo-vertical.png" alt="PAES logo" />
         </div>
-        <h1>Manage demand, supply, readiness, deployment, revenue, events, and certification in one place.</h1>
+
+        <span className="eyebrow">PAES Platform</span>
+        <h1>One workspace for PAES operations and reporting.</h1>
         <p>
-          Sign in with Microsoft Entra ID to access the PAES workspace for operations,
-          partner coordination, and executive reporting.
+          Manage demand, supply, readiness, deployment, events, certification, and revenue with a
+          single secure sign-in.
         </p>
-        <Button onClick={() => void instance.loginRedirect(loginRequest)}>Sign in to {env.appName}</Button>
+
+        <div className="login-simple__actions">
+          <Button onClick={() => void instance.loginRedirect(loginRequest)}>Sign in</Button>
+        </div>
+
+        <div className="login-simple__meta">
+          <span>Secure organizational access</span>
+          <span>Role-based workspace</span>
+        </div>
       </section>
     </div>
   );

@@ -7,8 +7,8 @@ export function SetupRequiredPage({ missingKeys }: { missingKeys: string[] }) {
         <span className="eyebrow">Environment Setup Required</span>
         <h1>{env.appName} needs tenant configuration before it can render the full app.</h1>
         <p>
-          The preview was blank because the application could not find the required Microsoft
-          Entra ID and Dataverse environment variables.
+          The preview was blank because the application could not find the required identity and
+          environment settings.
         </p>
 
         <div className="setup-panel">

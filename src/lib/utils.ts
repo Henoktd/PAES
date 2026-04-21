@@ -24,6 +24,16 @@ export function formatCurrency(value?: number | null, currency = "USD") {
   }).format(value);
 }
 
+export function formatNumber(value?: number | null) {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return "N/A";
+  }
+
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
 export function formatPercent(value?: number | null, maximumFractionDigits = 1) {
   if (value === null || value === undefined || Number.isNaN(value)) {
     return "N/A";

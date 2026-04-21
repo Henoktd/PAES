@@ -23,7 +23,6 @@ interface AccessControlContextValue {
   entraRoles: AppRole[];
   assignments: AccessAssignment[];
   visibleModuleKeys: string[];
-  canManageAccess: boolean;
   canAccess: (moduleKey: string) => boolean;
   canCreateEdit: (moduleKey: string) => boolean;
   canDelete: (moduleKey: string) => boolean;
@@ -104,7 +103,6 @@ export function AccessControlProvider({ children }: PropsWithChildren) {
       entraRoles,
       assignments,
       visibleModuleKeys,
-      canManageAccess: Boolean(roleDefinitions[currentRole].canManageAccess),
       canAccess: (moduleKey: string) => visibleModuleKeys.includes(moduleKey),
       canCreateEdit: (moduleKey: string) =>
         visibleModuleKeys.includes(moduleKey) && Boolean(roleDefinitions[currentRole].canCreateEdit),

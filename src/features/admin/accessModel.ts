@@ -9,7 +9,6 @@ export interface RoleDefinition {
   label: string;
   description: string;
   modules: string[];
-  canManageAccess?: boolean;
   canCreateEdit?: boolean;
   canDelete?: boolean;
 }
@@ -39,9 +38,7 @@ export const roleDefinitions: Record<AppRole, RoleDefinition> = {
       "events",
       "event-registrations",
       "certifications",
-      "admin",
     ],
-    canManageAccess: true,
     canCreateEdit: true,
     canDelete: true,
   },

@@ -1,7 +1,6 @@
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { LoginPage } from "../features/auth/LoginPage";
 import { ProtectedRoute } from "../features/auth/ProtectedRoute";
-import { AdminPage } from "../features/admin/AdminPage";
 import { RequireAccess } from "../features/admin/RequireAccess";
 import { DashboardPage } from "../features/dashboard/pages/DashboardPage";
 import { DemandDetailPage } from "../features/demand/pages/DemandDetailPage";
@@ -31,14 +30,6 @@ const router = createBrowserRouter([
         element: (
           <RequireAccess moduleKey="dashboard">
             <DashboardPage />
-          </RequireAccess>
-        ),
-      },
-      {
-        path: "admin",
-        element: (
-          <RequireAccess moduleKey="admin">
-            <AdminPage />
           </RequireAccess>
         ),
       },

@@ -19,7 +19,7 @@ export function Topbar() {
       <div className="topbar__actions">
         <div className="topbar__user">
           <strong>{account?.name ?? "Signed-in user"}</strong>
-          <span>{account?.username ?? "Microsoft Entra ID"}</span>
+          <span>{account?.username ?? "Organization account"}</span>
           <span>{roleDefinitions[currentRole].label}</span>
         </div>
         <Button variant="ghost" onClick={() => void instance.logoutRedirect()}>

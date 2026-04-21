@@ -1,9 +1,10 @@
+import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "../../../components/ui/Card";
 import { ErrorState } from "../../../components/ui/ErrorState";
 import { LoadingState } from "../../../components/ui/LoadingState";
-import { formatCurrency, formatPercent } from "../../../lib/utils";
+import { formatCurrency, formatNumber, formatPercent } from "../../../lib/utils";
 import { useDataverseClient } from "../../../services/dataverse/DataverseContext";
 import type { DataverseListResponse } from "../../../types/entities";
 import { demandModule, supplyModule, moduleRoutes } from "../../modules/moduleRegistry";
@@ -204,7 +205,7 @@ function filterRecordsByDate(
 function MetricList({
   items,
 }: {
-  items: Array<{ label: string; value: string; helper?: string }>;
+  items: Array<{ label: string; value: string; helper?: ReactNode }>;
 }) {
   return (
     <div className="metric-list">
@@ -593,10 +594,10 @@ export function DashboardPage() {
   ];
 
   const executiveStats = [
-    { label: "Total Demand Volume", value: totalDemandVolume.toString() },
-    { label: "Total Supply Available", value: totalSupplyAvailable.toString() },
-    { label: "Ready Candidates", value: readyCandidates.toString() },
-    { label: "Deployments (Monthly)", value: monthlyDeployments.toString() },
+    { label: "Demand Volume (Seats)", value: formatNumber(totalDemandVolume) },
+    { label: "Supply Available", value: formatNumber(totalSupplyAvailable) },
+    { label: "Ready Candidates", value: formatNumber(readyCandidates) },
+    { label: "Deployments This Month", value: formatNumber(monthlyDeployments) },
     { label: "Total Revenue", value: formatCurrency(totalRevenue) },
   ];
 
@@ -733,15 +734,15 @@ export function DashboardPage() {
         <Card title="Deployment & Revenue" subtitle="Track placement throughput and commercial performance across revenue sources.">
           <MetricList
             items={[
-              { label: "Placements", value: deployments.length.toString() },
+              { label: "Placements", value: formatNumber(deployments.length) },
               {
                 label: "Revenue per Placement",
                 value: formatCurrency(deployments.length > 0 ? placementRevenue / deployments.length : null),
               },
-              { label: "Deployment Revenue", value: formatCurrency(placementRevenue) },
-              { label: "Learning Revenue", value: formatCurrency(paymentStreams.learning) },
-              { label: "Event Revenue", value: formatCurrency(totalEventRevenue) },
-              { label: "Certification Revenue", value: formatCurrency(totalCertificationRevenue) },
+              { label: "Deployment Revenue", value: formatCurrency(placementRevenue), helper: "Placement-driven revenue" },
+              { label: "Learning Revenue", value: formatCurrency(paymentStreams.learning), helper: "Learning and training income" },
+              { label: "Event Revenue", value: formatCurrency(totalEventRevenue), helper: "Commercial return from events" },
+              { label: "Certification Revenue", value: formatCurrency(totalCertificationRevenue), helper: "Certification-related income" },
             ]}
           />
         </Card>
@@ -749,8 +750,8 @@ export function DashboardPage() {
         <Card title="Events Performance" subtitle="Event demand generation and monetization performance in one view.">
           <MetricList
             items={[
-              { label: "Number of Events", value: events.length.toString() },
-              { label: "Registrations", value: registrationsCount.toString() },
+              { label: "Number of Events", value: formatNumber(events.length) },
+              { label: "Registrations", value: formatNumber(registrationsCount) },
               { label: "Attendance Rate", value: formatPercent(attendanceRate) },
               { label: "Revenue per Event", value: formatCurrency(revenuePerEvent) },
               { label: "Total Event Revenue", value: formatCurrency(totalEventRevenue) },
@@ -763,8 +764,8 @@ export function DashboardPage() {
         <Card title="Certification Overview" subtitle="Monitor certification throughput, value creation, and gaps by skill area.">
           <MetricList
             items={[
-              { label: "Candidates in Pipeline", value: certificationPipeline.toString() },
-              { label: "Completed Certifications", value: certificationCompleted.toString() },
+              { label: "Candidates in Pipeline", value: formatNumber(certificationPipeline) },
+              { label: "Completed Certifications", value: formatNumber(certificationCompleted) },
               { label: "Certification Revenue", value: formatCurrency(totalCertificationRevenue) },
               { label: "Certification Completion %", value: formatPercent(certificationMetPct) },
             ]}
@@ -781,30 +782,76 @@ export function DashboardPage() {
         <Card title="Mandatory Metrics" subtitle="Core weekly operating measures for management review.">
           <MetricList
             items={[
-              { label: "Total demand volume", value: totalDemandVolume.toString() },
-              { label: "Repeat demand %", value: formatPercent(repeatDemandClients) },
-              { label: "Total candidates", value: totalSupplyAvailable.toString() },
-              { label: "% ready for deployment", value: formatPercent(readyPercent) },
               {
-                label: "Time to readiness",
-                value: timeToReadiness !== null ? `${timeToReadiness.toFixed(1)} days` : "N/A",
-                helper: "Based on expected readiness dates currently mapped in supply.",
+                label: "Demand Volume",
+                value: formatNumber(totalDemandVolume),
+                helper: "Total seats represented in current demand records",
               },
-              { label: "% meeting certification requirements", value: formatPercent(certificationMetPct) },
-              { label: "Certification pipeline volume", value: certificationPipeline.toString() },
-              { label: "Certification revenue", value: formatCurrency(totalCertificationRevenue) },
-              { label: "Placement rate", value: formatPercent(placementRate) },
               {
-                label: "Time to deployment",
+                label: "Repeat Demand",
+                value: formatPercent(repeatDemandClients),
+                helper: "Share of demand coming from repeat clients",
+              },
+              {
+                label: "Total Candidates",
+                value: formatNumber(totalSupplyAvailable),
+                helper: "Supply records currently available in the pipeline",
+              },
+              {
+                label: "Ready for Deployment",
+                value: formatPercent(readyPercent),
+                helper: "Share of supply already marked ready",
+              },
+              {
+                label: "Average Time to Readiness",
+                value: timeToReadiness !== null ? `${timeToReadiness.toFixed(1)} days` : "N/A",
+                helper: "Based on expected readiness dates recorded in supply",
+              },
+              {
+                label: "Meeting Certification Requirements",
+                value: formatPercent(certificationMetPct),
+                helper: "Completed certifications as a share of the active certification pipeline",
+              },
+              {
+                label: "Certification Pipeline",
+                value: formatNumber(certificationPipeline),
+                helper: "Candidates currently moving through certification",
+              },
+              {
+                label: "Certification Revenue",
+                value: formatCurrency(totalCertificationRevenue),
+              },
+              {
+                label: "Placement Rate",
+                value: formatPercent(placementRate),
+                helper: "Deployments as a share of total supply",
+              },
+              {
+                label: "Average Time to Deployment",
                 value: timeToDeployment !== null ? `${timeToDeployment.toFixed(1)} days` : "N/A",
                 helper: "Average days from readiness update to deployment date.",
               },
-              { label: "Total revenue", value: formatCurrency(totalRevenue) },
-              { label: "Revenue per candidate", value: formatCurrency(revenuePerCandidate) },
-              { label: "Revenue by source", value: `${formatCurrency(placementRevenue)} / ${formatCurrency(paymentStreams.learning)} / ${formatCurrency(totalEventRevenue)} / ${formatCurrency(totalCertificationRevenue)}` },
-              { label: "Number of events", value: events.length.toString() },
-              { label: "Attendance rate", value: formatPercent(attendanceRate) },
-              { label: "Revenue per event", value: formatCurrency(revenuePerEvent) },
+              { label: "Total Revenue", value: formatCurrency(totalRevenue) },
+              {
+                label: "Revenue per Candidate",
+                value: formatCurrency(revenuePerCandidate),
+                helper: "Average revenue against total supply records",
+              },
+              {
+                label: "Revenue Mix",
+                value: formatCurrency(totalRevenue),
+                helper: (
+                  <div className="metric-breakdown">
+                    <span>Deployment {formatCurrency(placementRevenue)}</span>
+                    <span>Learning {formatCurrency(paymentStreams.learning)}</span>
+                    <span>Events {formatCurrency(totalEventRevenue)}</span>
+                    <span>Certification {formatCurrency(totalCertificationRevenue)}</span>
+                  </div>
+                ),
+              },
+              { label: "Events Held", value: formatNumber(events.length) },
+              { label: "Attendance Rate", value: formatPercent(attendanceRate) },
+              { label: "Revenue per Event", value: formatCurrency(revenuePerEvent) },
             ]}
           />
         </Card>
