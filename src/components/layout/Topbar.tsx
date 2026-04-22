@@ -1,5 +1,5 @@
 import { useMsal } from "@azure/msal-react";
-import { LogOut, Menu, Search } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { useAccessControl } from "../../features/admin/AccessControlContext";
 import { roleDefinitions } from "../../features/admin/accessModel";
 import { Button } from "../ui/Button";
@@ -19,10 +19,7 @@ export function Topbar({ onMenuToggle }: TopbarProps) {
         <Menu size={18} />
       </button>
 
-      <div className="topbar__search">
-        <Search size={18} />
-        <input placeholder="Search demand, partners, learners, and regions" aria-label="Search" />
-      </div>
+      <div className="topbar__spacer" aria-hidden="true" />
 
       <div className="topbar__actions">
         <div className="topbar__user">

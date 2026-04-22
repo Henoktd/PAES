@@ -177,22 +177,8 @@ input {
   flex-shrink: 0;
 }
 
-.topbar__search {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: min(100%, 460px);
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: white;
-}
-
-.topbar__search input {
-  width: 100%;
-  border: 0;
-  outline: none;
-  background: transparent;
+.topbar__spacer {
+  flex: 1;
 }
 
 .topbar__actions {
@@ -365,6 +351,29 @@ input {
 
 .dashboard-kpi-card span {
   color: var(--muted);
+}
+
+.reports-page {
+  min-height: calc(100vh - 120px);
+}
+
+.report-embed-shell {
+  overflow: hidden;
+  border: 1px solid rgba(221, 211, 200, 0.9);
+  border-radius: 1.1rem;
+  background: #f8f5f1;
+}
+
+.report-embed-shell--full {
+  height: 100%;
+}
+
+.report-embed-frame {
+  display: block;
+  width: 100%;
+  min-height: calc(100vh - 140px);
+  border: 0;
+  background: #ffffff;
 }
 
 .dashboard-section-grid {
@@ -821,10 +830,6 @@ input {
     text-align: left;
   }
 
-  .topbar__search {
-    min-width: 100%;
-  }
-
   .app-shell__content {
     padding: 1rem;
   }
@@ -918,5 +923,9 @@ input {
 
   .login-simple {
     padding: 2rem 1.4rem;
+  }
+
+  .report-embed-frame {
+    min-height: 72vh;
   }
 }

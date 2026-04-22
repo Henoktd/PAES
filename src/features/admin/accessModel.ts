@@ -27,6 +27,7 @@ export const roleDefinitions: Record<AppRole, RoleDefinition> = {
     description: "Full configuration, access management, and reporting visibility.",
     modules: [
       "dashboard",
+      "reports",
       "demand",
       "supply",
       "readiness",
@@ -47,6 +48,7 @@ export const roleDefinitions: Record<AppRole, RoleDefinition> = {
     description: "Oversees pipeline execution from demand through deployment.",
     modules: [
       "dashboard",
+      "reports",
       "demand",
       "supply",
       "readiness",
@@ -64,19 +66,19 @@ export const roleDefinitions: Record<AppRole, RoleDefinition> = {
   finance_lead: {
     label: "Finance Lead",
     description: "Reviews payments, revenue, and executive performance.",
-    modules: ["dashboard", "payments", "deployments", "events", "event-registrations", "certifications"],
+    modules: ["dashboard", "reports", "payments", "deployments", "events", "event-registrations", "certifications"],
     canCreateEdit: true,
   },
   partner_manager: {
     label: "Partner Manager",
     description: "Works with partners, supply, learner readiness, and demand allocation.",
-    modules: ["dashboard", "demand", "supply", "readiness", "partners", "learners", "courses"],
+    modules: ["dashboard", "reports", "demand", "supply", "readiness", "partners", "learners", "courses"],
     canCreateEdit: true,
   },
   viewer: {
     label: "Viewer",
     description: "Read-only executive visibility across the PAES operating pipeline.",
-    modules: ["dashboard"],
+    modules: ["dashboard", "reports"],
   },
 };
 

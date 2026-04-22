@@ -3,6 +3,7 @@ import { LoginPage } from "../features/auth/LoginPage";
 import { ProtectedRoute } from "../features/auth/ProtectedRoute";
 import { RequireAccess } from "../features/admin/RequireAccess";
 import { DashboardPage } from "../features/dashboard/pages/DashboardPage";
+import { ReportsPage } from "../features/reports/pages/ReportsPage";
 import { DemandDetailPage } from "../features/demand/pages/DemandDetailPage";
 import { DemandFormPage } from "../features/demand/pages/DemandFormPage";
 import { DemandListPage } from "../features/demand/pages/DemandListPage";
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAccess moduleKey="dashboard">
             <DashboardPage />
+          </RequireAccess>
+        ),
+      },
+      {
+        path: "reports",
+        element: (
+          <RequireAccess moduleKey="reports">
+            <ReportsPage />
           </RequireAccess>
         ),
       },

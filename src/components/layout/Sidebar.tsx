@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
+  BarChart3,
   BookOpen,
   Briefcase,
   CalendarRange,
@@ -67,6 +68,13 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           <LayoutDashboard size={18} />
           <span>Dashboard</span>
         </NavLink>
+
+        {visibleModuleKeys.includes("reports") ? (
+          <NavLink to="/reports" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+            <BarChart3 size={18} />
+            <span>Reports</span>
+          </NavLink>
+        ) : null}
 
         {moduleRoutes
           .filter((moduleConfig) => visibleModuleKeys.includes(moduleConfig.key))
