@@ -690,6 +690,17 @@ input {
   min-width: 220px;
 }
 
+.login-simple__error {
+  margin: 0 0 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(179, 56, 35, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 244, 240, 0.95);
+  color: #8a2f1b;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
 .login-simple__meta {
   display: flex;
   flex-wrap: wrap;

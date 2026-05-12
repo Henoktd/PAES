@@ -1,34 +1,43 @@
 import type { PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
-import { PublicClientApplication } from "@azure/msal-browser";
+import type { IPublicClientApplication } from "@azure/msal-browser";
+import {
+  createNestablePublicClientApplication,
+  createStandardPublicClientApplication,
+} from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { msalConfig } from "../../config/msal";
+import { initializeHostEnvironment } from "../../features/auth/hostEnvironment";
 import { queryClient } from "../../lib/queryClient";
 import { LoadingState } from "../../components/ui/LoadingState";
 
-const msalInstance = new PublicClientApplication(msalConfig);
-
 export function AppProviders({ children }: PropsWithChildren) {
   const [isReady, setIsReady] = useState(false);
+  const [msalInstance, setMsalInstance] = useState<IPublicClientApplication | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     const bootstrap = async () => {
-      await msalInstance.initialize();
+      await initializeHostEnvironment();
 
-      const redirectResult = await msalInstance.handleRedirectPromise();
+      const instance = await createNestablePublicClientApplication(msalConfig).catch(() =>
+        createStandardPublicClientApplication(msalConfig),
+      );
+
+      const redirectResult = await instance.handleRedirectPromise();
       const redirectAccount = redirectResult?.account;
-      const existingAccount = msalInstance.getActiveAccount() ?? msalInstance.getAllAccounts()[0];
+      const existingAccount = instance.getActiveAccount() ?? instance.getAllAccounts()[0];
 
       if (redirectAccount) {
-        msalInstance.setActiveAccount(redirectAccount);
+        instance.setActiveAccount(redirectAccount);
       } else if (existingAccount) {
-        msalInstance.setActiveAccount(existingAccount);
+        instance.setActiveAccount(existingAccount);
       }
 
       if (!cancelled) {
+        setMsalInstance(instance);
         setIsReady(true);
       }
     };
@@ -40,7 +49,7 @@ export function AppProviders({ children }: PropsWithChildren) {
     };
   }, []);
 
-  if (!isReady) {
+  if (!isReady || !msalInstance) {
     return <LoadingState label="Preparing Microsoft sign-in..." />;
   }
 

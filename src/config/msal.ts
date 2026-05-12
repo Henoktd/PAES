@@ -1,7 +1,7 @@
-import type { Configuration, RedirectRequest, SilentRequest } from "@azure/msal-browser";
+import type { Configuration, PopupRequest, SilentRequest } from "@azure/msal-browser";
 import { env } from "./env";
 
-export const loginRequest: RedirectRequest = {
+export const loginRequest: PopupRequest = {
   scopes: ["openid", "profile", "email", ...(env.dataverseScope ? [env.dataverseScope] : [])],
 };
 

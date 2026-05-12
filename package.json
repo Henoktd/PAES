@@ -13,6 +13,7 @@
     "@azure/msal-browser": "^3.23.0",
     "@azure/msal-react": "^2.0.31",
     "@hookform/resolvers": "^3.9.0",
+    "@microsoft/teams-js": "^2.53.0",
     "@tanstack/react-query": "^5.59.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.462.0",

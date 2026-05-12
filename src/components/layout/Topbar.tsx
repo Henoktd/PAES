@@ -2,6 +2,7 @@ import { useMsal } from "@azure/msal-react";
 import { LogOut, Menu } from "lucide-react";
 import { useAccessControl } from "../../features/admin/AccessControlContext";
 import { roleDefinitions } from "../../features/admin/accessModel";
+import { isEmbeddedExperience } from "../../features/auth/hostEnvironment";
 import { Button } from "../ui/Button";
 
 interface TopbarProps {
@@ -12,6 +13,23 @@ export function Topbar({ onMenuToggle }: TopbarProps) {
   const { accounts, instance } = useMsal();
   const { currentRole } = useAccessControl();
   const account = accounts[0];
+
+  async function handleSignOut() {
+    try {
+      await instance.logoutPopup({
+        mainWindowRedirectUri: window.location.origin,
+        postLogoutRedirectUri: window.location.origin,
+      });
+    } catch (error) {
+      if (!isEmbeddedExperience()) {
+        await instance.logoutRedirect({
+          postLogoutRedirectUri: window.location.origin,
+        });
+      } else {
+        throw error;
+      }
+    }
+  }
 
   return (
     <header className="topbar">
@@ -27,7 +45,7 @@ export function Topbar({ onMenuToggle }: TopbarProps) {
           <span>{account?.username ?? "Organization account"}</span>
           <span>{roleDefinitions[currentRole].label}</span>
         </div>
-        <Button variant="ghost" onClick={() => void instance.logoutRedirect()}>
+        <Button variant="ghost" onClick={() => void handleSignOut()}>
           <LogOut size={16} />
           Sign out
         </Button>
