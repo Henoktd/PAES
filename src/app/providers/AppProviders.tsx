@@ -8,7 +8,10 @@ import {
 import { MsalProvider } from "@azure/msal-react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { msalConfig } from "../../config/msal";
-import { initializeHostEnvironment } from "../../features/auth/hostEnvironment";
+import {
+  initializeHostEnvironmentWithRetry,
+  isEmbeddedExperience,
+} from "../../features/auth/hostEnvironment";
 import { queryClient } from "../../lib/queryClient";
 import { LoadingState } from "../../components/ui/LoadingState";
 
@@ -20,7 +23,13 @@ export function AppProviders({ children }: PropsWithChildren) {
     let cancelled = false;
 
     const bootstrap = async () => {
-      await initializeHostEnvironment();
+      const embedded = isEmbeddedExperience();
+
+      if (embedded) {
+        await initializeHostEnvironmentWithRetry(2, 1000);
+      } else {
+        await initializeHostEnvironmentWithRetry();
+      }
 
       const instance = await createNestablePublicClientApplication(msalConfig).catch(() =>
         createStandardPublicClientApplication(msalConfig),

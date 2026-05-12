@@ -3,7 +3,10 @@ import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { loginRequest } from "../../config/msal";
 import { Button } from "../../components/ui/Button";
-import { initializeHostEnvironment, isEmbeddedExperience } from "./hostEnvironment";
+import {
+  initializeHostEnvironmentWithRetry,
+  isEmbeddedExperience,
+} from "./hostEnvironment";
 
 interface LoginLocationState {
   from?: string;
@@ -32,7 +35,7 @@ export function LoginPage() {
   useEffect(() => {
     let cancelled = false;
 
-    void initializeHostEnvironment().then((runningInTeams) => {
+    void initializeHostEnvironmentWithRetry(1, 800).then((runningInTeams) => {
       if (!cancelled) {
         setIsTeamsHost(runningInTeams);
       }
@@ -48,6 +51,17 @@ export function LoginPage() {
     setLoginError(null);
 
     try {
+      const embedded = isEmbeddedExperience();
+      const runningInTeams = await initializeHostEnvironmentWithRetry(embedded ? 1 : 0, 800);
+      setIsTeamsHost(runningInTeams);
+
+      if (embedded && !runningInTeams) {
+        setLoginError(
+          "Microsoft Teams did not finish initializing this app. Refresh the Teams tab once, then try again. If it still fails, verify the Entra SPA redirect URIs include https://ops.panafricanedu.com and brk-multihub://ops.panafricanedu.com.",
+        );
+        return;
+      }
+
       const loginResult = await instance.loginPopup(loginRequest);
       instance.setActiveAccount(loginResult.account);
       navigate(returnPath, { replace: true });
@@ -88,6 +102,7 @@ export function LoginPage() {
 
         <div className="login-simple__meta">
           {isTeamsHost ? <span>Microsoft Teams ready</span> : null}
+          {!isTeamsHost && isEmbeddedExperience() ? <span>Microsoft Teams detected</span> : null}
           <span>Secure organizational access</span>
           <span>Role-based workspace</span>
         </div>
